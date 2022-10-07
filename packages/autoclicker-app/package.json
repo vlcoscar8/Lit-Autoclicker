@@ -10,12 +10,13 @@
     "build": "rimraf dist && rollup -c rollup.config.js && npm run analyze -- --exclude dist",
     "start:build": "web-dev-server --root-dir dist --app-index index.html --open",
     "analyze": "cem analyze --litelement",
-    "start": "web-dev-server"
+    "start": "web-dev-server --app-index index.html"
   },
   "dependencies": {
-    "lit": "^2.0.2",
+    "@bbva/autoclicker-game": "*",
     "@bbva/autoclicker-home": "*",
-    "@bbva/autoclicker-game": "*"
+    "lit": "^2.0.2",
+    "pwa-helpers": "^0.9.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.16.4",
