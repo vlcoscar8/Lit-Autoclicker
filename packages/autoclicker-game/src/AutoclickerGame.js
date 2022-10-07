@@ -14,6 +14,15 @@ export class AutoclickerGame extends LitElement {
   }
 
   render() {
-    return html` <h2>Hi from game view</h2> `;
+    return html` <h2>Hi from game view</h2>
+      <button @click=${this.navigateToHome}>Start</button>`;
+  }
+
+  navigateToHome() {
+    this.dispatchEvent(
+      new CustomEvent("navigate", {
+        detail: "/home",
+      })
+    );
   }
 }
