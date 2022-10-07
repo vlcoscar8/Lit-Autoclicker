@@ -1,0 +1,25 @@
+{
+  "name": "@bbva/autoclicker-game",
+  "description": "Webcomponent autoclicker-game following open-wc recommendations",
+  "license": "MIT",
+  "author": "autoclicker-game",
+  "version": "0.0.0",
+  "main": "index.js",
+  "module": "index.js",
+  "scripts": {
+    "analyze": "cem analyze --litelement",
+    "start": "web-dev-server",
+    "test": "web-test-runner --coverage",
+    "test:watch": "web-test-runner --watch"
+  },
+  "dependencies": {
+    "lit": "^2.0.2"
+  },
+  "devDependencies": {
+    "@custom-elements-manifest/analyzer": "^0.4.17",
+    "@open-wc/testing": "next",
+    "@web/dev-server": "^0.1.28",
+    "@web/test-runner": "^0.13.22"
+  },
+  "customElements": "custom-elements.json"
+}
