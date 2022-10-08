@@ -7,7 +7,31 @@ import { installRouter } from "pwa-helpers/router.js";
 
 export class AutoclickerApp extends LitElement {
   static get styles() {
-    return css``;
+    return css`
+      :host {
+        width: 100vw;
+        height: 100vh;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        background-color: var(--background-color-primary, black);
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+      }
+
+      h1 {
+        font-size: 4rem;
+        background: var(--title-color-primary, white);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    `;
   }
 
   static get properties() {
@@ -28,7 +52,10 @@ export class AutoclickerApp extends LitElement {
   }
 
   render() {
-    return html`${this.loadPage()}`;
+    return html` <header>
+        <h1>AUTOCLICKER</h1>
+      </header>
+      ${this.loadPage()}`;
   }
 
   handleNavigation(location) {
