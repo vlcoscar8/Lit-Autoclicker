@@ -38,12 +38,14 @@ export class AutoclickerApp extends LitElement {
   static get properties() {
     return {
       page: { type: String },
+      user: { type: Object },
     };
   }
 
   constructor() {
     super();
     this.page = "home";
+    this.user = {};
   }
 
   firstUpdated() {
@@ -85,11 +87,14 @@ export class AutoclickerApp extends LitElement {
   renderGameView() {
     return html`<autoclicker-game
       @navigate=${this.navigate}
+      .user=${this.user}
     ></autoclicker-game>`;
   }
 
   navigate(e) {
-    window.history.pushState({}, "", e.detail);
+    window.history.pushState({}, "", e.detail.view);
     this.handleNavigation(window.location);
+
+    this.user = e.detail.user;
   }
 }
