@@ -17,7 +17,7 @@ export class AutoclickerApp extends LitElement {
         align-items: center;
         justify-content: center;
 
-        background-color: var(--background-color-primary, black);
+        background-color: var(--app-background-color-primary, black);
       }
 
       header {
@@ -27,7 +27,8 @@ export class AutoclickerApp extends LitElement {
 
       h1 {
         font-size: 4rem;
-        background: var(--title-color-primary, white);
+        background: var(--app-title-color-primary, white);
+        background-clip: none;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
