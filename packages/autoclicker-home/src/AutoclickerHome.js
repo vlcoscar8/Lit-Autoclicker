@@ -118,17 +118,26 @@ export class AutoclickerHome extends LitElement {
   changeInputValue(e) {
     this.name = e.target.value;
   }
+
   submitName(e) {
     e.preventDefault();
     const validName = /^[A-Z][a-z]/;
 
-    validName.test(this.name) ? this.navigateToGame() : this.openErrorMessage();
+    if (!validName.test(this.name)) {
+      this.openErrorMessage();
+      return;
+    }
+
+    this.navigateToGame();
   }
 
   navigateToGame() {
     this.dispatchEvent(
       new CustomEvent("navigate", {
-        detail: "game",
+        detail: {
+          view: "game",
+          user: this.manageStorage(),
+        },
       })
     );
   }
@@ -138,5 +147,49 @@ export class AutoclickerHome extends LitElement {
     setTimeout(() => {
       this.error = "";
     }, 1500);
+  }
+
+  manageStorage() {
+    let currentUser = JSON.parse(localStorage.getItem("users"))?.find(
+      (user) => user.name === this.name
+    );
+
+    if (localStorage.getItem("users") == null) {
+      return this.createFirstUser();
+    }
+
+    if (!currentUser && localStorage.getItem("users")) {
+      return this.addNewUser();
+    }
+
+    return currentUser;
+  }
+
+  createFirstUser() {
+    const users = [
+      {
+        name: this.name,
+        points: 0,
+      },
+    ];
+
+    localStorage.setItem("users", JSON.stringify(users));
+
+    return users[0];
+  }
+
+  addNewUser() {
+    const users = JSON.parse(localStorage.getItem("users"));
+
+    const newUser = {
+      name: this.name,
+      points: 0,
+    };
+
+    const updatedUsers = [...users, newUser];
+
+    localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+    return newUser;
   }
 }
