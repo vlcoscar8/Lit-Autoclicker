@@ -13,6 +13,7 @@
     "test:watch": "web-test-runner --watch"
   },
   "dependencies": {
+    "@polymer/iron-icons": "^3.0.1",
     "lit": "^2.0.2"
   },
   "devDependencies": {
