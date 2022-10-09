@@ -19,19 +19,6 @@ export class AutoclickerApp extends LitElement {
 
         background-color: var(--app-background-color-primary, black);
       }
-
-      header {
-        position: fixed;
-        top: 0;
-      }
-
-      h1 {
-        font-size: 4rem;
-        background: var(--app-title-color-primary, white);
-        background-clip: none;
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
     `;
   }
 
@@ -55,10 +42,7 @@ export class AutoclickerApp extends LitElement {
   }
 
   render() {
-    return html` <header>
-        <h1>AUTOCLICKER</h1>
-      </header>
-      ${this.loadPage()}`;
+    return html`${this.loadPage()}`;
   }
 
   handleNavigation(location) {
@@ -96,5 +80,7 @@ export class AutoclickerApp extends LitElement {
     this.handleNavigation(window.location);
 
     this.user = e.detail.user;
+
+    localStorage.setItem("lastUser", JSON.stringify(this.user));
   }
 }
