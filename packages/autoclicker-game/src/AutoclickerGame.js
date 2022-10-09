@@ -66,6 +66,15 @@ export class AutoclickerGame extends LitElement {
         padding: 1.5rem 9rem;
         border-radius: 0.7rem;
         text-transform: uppercase;
+      }
+
+      .disabled {
+        color: var(--game-button-disabled-text-color, #000000);
+        border: 1px solid var(--game-button-disabled-border-color, #000000);
+        background-color: var(--game-button-disabled-background-color, #86edff);
+      }
+
+      .active {
         color: var(--home-button-text-color, #000000);
         border: 1px solid var(--home-button-border-color, #000000);
         background-color: var(--home-button-background-color, #86edff);
@@ -88,21 +97,20 @@ export class AutoclickerGame extends LitElement {
     this.user = "";
     this.counter = 0;
     this.autoclickerBaseCost = 1;
-    this.autoclikerCost = this.autoclickerBaseCost * 50;
+    this.autoclikerCost = 50;
     this.interval = [];
   }
 
-  willUpdate() {
+  firstUpdated() {
     this.user = JSON.parse(localStorage.getItem("lastUser"));
     this.counter = JSON.parse(localStorage.getItem("users")).find(
       (user) => user.name === this.user.name
     ).points;
-  }
 
-  firstUpdated() {
     if (this.user.baseCost > 1) {
       this.autoclickerBaseCost = this.user.baseCost;
-      this.interval = setInterval(this.autoclickerEffect.bind(this), 100);
+      this.autoclikerCost = this.user.clickerCost;
+      this.addAutoclickerInterval(this.autoclickerBaseCost);
     }
   }
 
@@ -119,16 +127,25 @@ export class AutoclickerGame extends LitElement {
       <section>
         <h2>Hi ${this.user.name}</h2>
         <p>Points: ${this.counter}</p>
-        <button @click=${this.addClick}>Click</button>
-        ${this.counter >= this.autoclikerCost
-          ? html`<button @click=${this.buyAutoclicker}>Boost</button>`
+        <p>Autoclickers bought: ${this.autoclickerBaseCost - 1}</p>
+        <button class="active" @click=${this.addClick}>Click</button>
+        ${this.autoclickerBaseCost > 1 || this.counter >= 50
+          ? html`<button
+              @click=${this.buyAutoclicker}
+              ?disabled=${this.counter <= this.autoclikerCost ? true : false}
+              class=${this.counter < this.autoclikerCost
+                ? "disabled"
+                : "active"}
+            >
+              Buy boost (${this.autoclikerCost})
+            </button>`
           : ""}
       </section>
     `;
   }
 
   navigateToHome() {
-    clearInterval(this.interval);
+    this.interval.forEach((item) => clearInterval(item));
 
     this.dispatchEvent(
       new CustomEvent("navigate", {
@@ -142,19 +159,30 @@ export class AutoclickerGame extends LitElement {
 
   addClick() {
     this.counter += 1;
-
     this.updateUser();
   }
 
   buyAutoclicker() {
-    this.counter -= this.autoclikerCost;
+    this.counter = this.counter - this.autoclikerCost;
     this.autoclickerBaseCost = this.user.baseCost + 1;
+    this.autoclikerCost *= this.autoclickerBaseCost;
+    this.addAutoclickerInterval();
+  }
 
-    this.interval = setInterval(this.autoclickerEffect.bind(this), 100);
+  addAutoclickerInterval(basecost) {
+    const timeInterval = basecost > 1 ? 100 / basecost : 100;
+
+    const currentInterval = setInterval(
+      this.autoclickerEffect.bind(this),
+      timeInterval
+    );
+
+    this.interval.push(currentInterval);
   }
 
   autoclickerEffect() {
     this.counter += 1;
+
     this.updateUser();
   }
 
@@ -163,7 +191,12 @@ export class AutoclickerGame extends LitElement {
 
     allUsers = allUsers.map((user) =>
       user.name === this.user.name
-        ? { ...user, points: this.counter, baseCost: this.autoclickerBaseCost }
+        ? {
+            ...user,
+            points: this.counter,
+            baseCost: this.autoclickerBaseCost,
+            clickerCost: this.autoclikerCost,
+          }
         : user
     );
 
