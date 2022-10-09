@@ -8,13 +8,27 @@ export class AutoclickerHome extends LitElement {
       :host {
         width: 100%;
         height: 100%;
-        margin-top: 10rem;
 
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         gap: 2rem;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+      }
+
+      h1 {
+        font-size: 4rem;
+        background: var(--app-title-color-primary, white);
+        background-clip: none;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
       }
 
       h2 {
@@ -90,7 +104,11 @@ export class AutoclickerHome extends LitElement {
   }
 
   render() {
-    return html`<h2>Create new player</h2>
+    return html`
+    <header>
+        <h1>AUTOCLICKER</h1>
+      </header>
+    <h2>Create new player</h2>
       <form @submit=${(e) => this.submitName(e)}>
         <input
           class="field"
