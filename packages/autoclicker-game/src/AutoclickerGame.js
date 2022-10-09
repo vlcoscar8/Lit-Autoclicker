@@ -132,7 +132,7 @@ export class AutoclickerGame extends LitElement {
         ${this.autoclickerBaseCost > 1 || this.counter >= 50
           ? html`<button
               @click=${this.buyAutoclicker}
-              ?disabled=${this.counter <= this.autoclikerCost ? true : false}
+              ?disabled=${this.counter < this.autoclikerCost ? true : false}
               class=${this.counter < this.autoclikerCost
                 ? "disabled"
                 : "active"}
@@ -165,8 +165,8 @@ export class AutoclickerGame extends LitElement {
   buyAutoclicker() {
     this.counter = this.counter - this.autoclikerCost;
     this.autoclickerBaseCost = this.user.baseCost + 1;
-    this.autoclikerCost *= this.autoclickerBaseCost;
-    this.addAutoclickerInterval();
+    this.autoclikerCost = this.autoclikerCost + 50 * this.autoclickerBaseCost;
+    this.addAutoclickerInterval(this.autoclickerBaseCost);
   }
 
   addAutoclickerInterval(basecost) {
