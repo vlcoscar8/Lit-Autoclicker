@@ -188,9 +188,9 @@ export class AutoclickerHome extends LitElement {
       {
         name: this.name,
         points: 0,
+        baseCost: 1,
       },
     ];
-
     localStorage.setItem("users", JSON.stringify(users));
 
     return users[0];
@@ -198,10 +198,10 @@ export class AutoclickerHome extends LitElement {
 
   addNewUser() {
     const users = JSON.parse(localStorage.getItem("users"));
-
     const newUser = {
       name: this.name,
       points: 0,
+      baseCost: 1,
     };
 
     const updatedUsers = [...users, newUser];
