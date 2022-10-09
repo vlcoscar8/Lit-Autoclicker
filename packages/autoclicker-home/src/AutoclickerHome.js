@@ -87,6 +87,35 @@ export class AutoclickerHome extends LitElement {
         color: var(--home-error-icon-color, red);
         transform: scale(0.8);
       }
+
+      .ranking {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        gap: 1rem;
+        font-size: 1.7rem;
+        margin-top: 5rem;
+      }
+
+      .ranking__users {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 0.1rem;
+      }
+
+      .ranking__users--user {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      h4 {
+        margin: 0.5rem;
+      }
     `;
   }
 
@@ -94,6 +123,7 @@ export class AutoclickerHome extends LitElement {
     return {
       userName: { type: String },
       error: { type: String },
+      allUsers: { type: Array },
     };
   }
 
@@ -101,6 +131,11 @@ export class AutoclickerHome extends LitElement {
     super();
     this.userName = "";
     this.error = "";
+    this.allUsers = [];
+  }
+
+  firstUpdated() {
+    this.allUsers = JSON.parse(localStorage.getItem("users"));
   }
 
   render() {
@@ -130,7 +165,23 @@ export class AutoclickerHome extends LitElement {
           class="button"
           >Start</button
         >
-      </form> `;
+      </form>
+      <section class="ranking">
+        <h3>Ranking</h3>
+        <div class="ranking__users">
+          ${this.allUsers
+            .sort((a, b) => b.points - a.points)
+            .map(
+              (user, i) =>
+                html`<div class="ranking__users--user">
+                  <h4>${i + 1}</h4>
+                  <h4>${user.name}</h4>
+                  <h4>${user.points}</h4>
+                </div>`
+            )}
+        </div>
+      </section>
+      `;
   }
 
   changeInputValue(e) {
