@@ -262,38 +262,46 @@ export class AutoclickerHome extends LitElement {
         >
         </form>
       </main>
-      <section class="ranking">
-        <div class='rank__header'>
-          <h3>Rank</h3>
-          <iron-icon class='rank' icon='icons:change-history' @click=${
-            this.toggleRankView
-          }></iron-icon>
-        </div>
-        ${
-          this.rankView
-            ? html`<div class="ranking__users">
-                ${this.allUsers
-                  .sort((a, b) => b.points - a.points)
-                  .map(
-                    (user, i) =>
-                      html`<div class="ranking__users--user">
-                        <div>
-                          <h4>${i + 1}</h4>
-                          <img
-                            src=${this.newUser.rockets.basic.owned
-                              ? this.newUser.rockets.basic.img
-                              : this.newUser.rockets.pro.img}
-                          />
-                        </div>
-                        <h4>${user.name}</h4>
-                        <h4>${user.points}</h4>
-                      </div>`
-                  )}
-              </div>`
-            : ""
-        }
-        
-      </section>
+      ${
+        this.allUsers
+          ? html`<section class="ranking">
+              <div class="rank__header">
+                <h3>Rank</h3>
+                <iron-icon
+                  class="rank"
+                  icon="icons:change-history"
+                  @click=${this.toggleRankView}
+                ></iron-icon>
+              </div>
+              ${this.rankView
+                ? html`<div class="ranking__users">
+                    ${this.allUsers
+                      .sort((a, b) => b.points - a.points)
+                      .map(
+                        (user, i) =>
+                          html`<div class="ranking__users--user">
+                            <div>
+                              <h4>${i + 1}</h4>
+                              <img
+                                src=${user.rockets.basic.owned
+                                  ? user.rockets.basic.img
+                                  : user.rockets.pro.img}
+                              />
+                            </div>
+                            <h4>${user.name}</h4>
+                            <h4>
+                              ${user.points >= 1000
+                                ? `${(user.points / 1000).toFixed(1)}k`
+                                : user.points}
+                            </h4>
+                          </div>`
+                      )}
+                  </div>`
+                : ""}
+            </section>`
+          : ""
+      }
+      
     `;
   }
 
