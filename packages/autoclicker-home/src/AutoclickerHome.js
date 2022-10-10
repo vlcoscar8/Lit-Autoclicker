@@ -6,21 +6,21 @@ export class AutoclickerHome extends LitElement {
   static get styles() {
     return css`
       :host {
-        width: 100%;
-        height: 100%;
-
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        gap: 2rem;
+        height: 100vh;
       }
 
       header {
         display: flex;
         align-items: center;
-        justify-content: center;
-        width: 100vw;
+        height: 20%;
+      }
+
+      .rocket {
+        transform: scale(0.15);
       }
 
       h1 {
@@ -29,6 +29,15 @@ export class AutoclickerHome extends LitElement {
         background-clip: none;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
+      }
+
+      main {
+        width: 100vw;
+        height: 50%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 15rem;
       }
 
       h2 {
@@ -41,15 +50,15 @@ export class AutoclickerHome extends LitElement {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         gap: 0.5rem;
-        width: 60vw;
+        width: 100%;
+        height: 100%;
       }
 
       .field {
         background-color: transparent;
         color: var(--home-input-color, white);
-        width: 100%;
+        width: 70%;
         font-size: 2rem;
         padding: 1.5rem;
         border-radius: 0.7rem;
@@ -63,7 +72,7 @@ export class AutoclickerHome extends LitElement {
       .button {
         margin-top: 1.5rem;
         font-size: 1.5rem;
-        padding: 1.5rem 5rem;
+        padding: 1.5rem 8rem;
         border-radius: 0.7rem;
         text-transform: uppercase;
         color: var(--home-button-text-color, #000000);
@@ -96,42 +105,127 @@ export class AutoclickerHome extends LitElement {
         color: white;
         gap: 1rem;
         font-size: 1.7rem;
-        margin-top: 5rem;
+        margin-top: -20rem;
+        max-height: 28rem;
       }
 
-      .ranking__users {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        gap: 0.1rem;
+      .rank {
+        transform: rotate(180deg) scale(0.8);
       }
 
-      .ranking__users--user {
+      :host([rankView]) .rank {
+        transform: rotate(0deg) scale(0.8);
+      }
+
+      .rank__header {
         display: flex;
         align-items: center;
         gap: 1rem;
       }
 
+      .ranking__users {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1em;
+
+        overflow-y: scroll;
+      }
+
+      .ranking__users--user {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 70vw;
+        box-sizing: border-box;
+        padding: 0.5rem 2rem;
+        gap: 2rem;
+
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+
+        animation: fell-down 1s ease;
+      }
+
+      .ranking__users--user div {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .ranking__users--user img {
+        width: 3rem;
+      }
+
       h4 {
         margin: 0.5rem;
+      }
+
+      @keyframes fell-down {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #f1f1f111;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #88888852;
+        border-radius: 1rem;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
       }
     `;
   }
 
   static get properties() {
     return {
-      userName: { type: String },
+      name: { type: String },
       error: { type: String },
       allUsers: { type: Array },
+      newUser: { type: Object },
+      rankView: { type: Boolean, reflect: true },
     };
   }
 
   constructor() {
     super();
-    this.userName = "";
+    this.name = "";
     this.error = "";
     this.allUsers = [];
+    this.newUser = {
+      name: "",
+      points: 0,
+      baseCost: 1,
+      rockets: {
+        basic: {
+          owned: true,
+          img: "https://cdn-icons-png.flaticon.com/512/316/316309.png",
+        },
+        pro: {
+          owned: false,
+          img: "https://cdn-icons-png.flaticon.com/512/181/181764.png",
+        },
+      },
+    };
+    this.rankView = false;
   }
 
   firstUpdated() {
@@ -140,11 +234,12 @@ export class AutoclickerHome extends LitElement {
 
   render() {
     return html`
-    <header>
-        <h1>AUTOCLICKER</h1>
+      <header>
+        <h1>PlanetClicker</h1>
       </header>
-    <h2>Create new player</h2>
-      <form @submit=${(e) => this.submitName(e)}>
+      <main>
+        <h2>Create new player</h2>
+        <form @submit=${(e) => this.submitName(e)}>
         <input
           class="field"
           placeholder="Name"
@@ -165,23 +260,41 @@ export class AutoclickerHome extends LitElement {
           class="button"
           >Start</button
         >
-      </form>
+        </form>
+      </main>
       <section class="ranking">
-        <h3>Ranking</h3>
-        <div class="ranking__users">
-          ${this.allUsers
-            .sort((a, b) => b.points - a.points)
-            .map(
-              (user, i) =>
-                html`<div class="ranking__users--user">
-                  <h4>${i + 1}</h4>
-                  <h4>${user.name}</h4>
-                  <h4>${user.points}</h4>
-                </div>`
-            )}
+        <div class='rank__header'>
+          <h3>Rank</h3>
+          <iron-icon class='rank' icon='icons:change-history' @click=${
+            this.toggleRankView
+          }></iron-icon>
         </div>
+        ${
+          this.rankView
+            ? html`<div class="ranking__users">
+                ${this.allUsers
+                  .sort((a, b) => b.points - a.points)
+                  .map(
+                    (user, i) =>
+                      html`<div class="ranking__users--user">
+                        <div>
+                          <h4>${i + 1}</h4>
+                          <img
+                            src=${this.newUser.rockets.basic.owned
+                              ? this.newUser.rockets.basic.img
+                              : this.newUser.rockets.pro.img}
+                          />
+                        </div>
+                        <h4>${user.name}</h4>
+                        <h4>${user.points}</h4>
+                      </div>`
+                  )}
+              </div>`
+            : ""
+        }
+        
       </section>
-      `;
+    `;
   }
 
   changeInputValue(e) {
@@ -235,13 +348,7 @@ export class AutoclickerHome extends LitElement {
   }
 
   createFirstUser() {
-    const users = [
-      {
-        name: this.name,
-        points: 0,
-        baseCost: 1,
-      },
-    ];
+    const users = [{ ...this.newUser, name: this.name }];
     localStorage.setItem("users", JSON.stringify(users));
 
     return users[0];
@@ -249,16 +356,16 @@ export class AutoclickerHome extends LitElement {
 
   addNewUser() {
     const users = JSON.parse(localStorage.getItem("users"));
-    const newUser = {
-      name: this.name,
-      points: 0,
-      baseCost: 1,
-    };
+    const newUser = { ...this.newUser, name: this.name };
 
     const updatedUsers = [...users, newUser];
 
     localStorage.setItem("users", JSON.stringify(updatedUsers));
 
     return newUser;
+  }
+
+  toggleRankView() {
+    this.rankView = !this.rankView;
   }
 }
