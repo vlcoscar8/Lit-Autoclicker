@@ -11,13 +11,12 @@ export class AutoclickerApp extends LitElement {
       :host {
         width: 100vw;
         height: 100vh;
-
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-
-        background-color: var(--app-background-color-primary, black);
+        background-image: url("https://fsa.zobj.net/crop.php?r=cUwCaG3tjN3elbWNPaT2KHhv9PwvmSxXxKviHByDbJeeMtNUf3tB69bEAyM7dxZVTCyanOixTnJUdB8jDFhK9vhpUi4zCw5kHhNCK-SHkA4rZlAQp_AjvvhtaFF7_RKBN9OevuVeliAFFtXuTGg-L5ZaYDriijukCInePTvL6A0W_Ls-erpjt9cZcp_XvtbhdB2G9j8R9oWFTCiu");
+        background-size: cover;
       }
     `;
   }
