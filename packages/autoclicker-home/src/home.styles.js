@@ -34,7 +34,7 @@ export const homeStyles = () => {
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 15rem;
+      margin-top: 10rem;
     }
 
     h2 {
