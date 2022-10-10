@@ -33,10 +33,10 @@ export class AutoclickerGame extends LitElement {
     this.interval = [];
     this.boosted = false;
     this.planets = [
-      "../public/planets/jupiter.png",
-      "../public/planets/mars.png",
-      "../public/planets/planet-earth.png",
-      "../public/planets/saturn.png",
+      "../public/jupiter.png",
+      "../public/mars.png",
+      "../public/planet-earth.png",
+      "../public/saturn.png",
     ];
 
     this.planet = "";
