@@ -48,6 +48,16 @@ export class AutoclickerGame extends LitElement {
         justify-content: flex-start;
       }
 
+      .name {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .name img {
+        width: 5rem;
+      }
+
       h2 {
         font-size: 2.5rem;
         font-weight: 100;
@@ -103,6 +113,54 @@ export class AutoclickerGame extends LitElement {
 
       .planet {
         width: 7rem;
+      }
+
+      .factory {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 1em;
+        margin-top: 3rem;
+        color: white;
+      }
+
+      .factory__header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        font-size: 1.7rem;
+      }
+
+      .factory-icon {
+        transform: rotate(180deg) scale(0.8);
+      }
+
+      .factory img {
+        width: 4rem;
+      }
+
+      .factory button {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        width: 90vw;
+        padding: 1rem 3rem;
+      }
+
+      .rocket-active {
+        color: var(--home-button-text-color, #000000);
+        border: 1px solid var(--home-button-border-color, #000000);
+        background-color: var(
+          --game-button-rocket-active-background-color,
+          #86edff
+        );
+      }
+
+      :host([factoryView]) .factory-icon {
+        transform: rotate(0deg) scale(0.8);
       }
 
       @keyframes grow {
@@ -161,6 +219,8 @@ export class AutoclickerGame extends LitElement {
       interval: { type: Array },
       boosted: { type: Boolean, reflect: true },
       planet: { type: String },
+      factoryView: { type: Boolean, reflect: true },
+      rocketCreated: { type: Boolean },
     };
   }
 
@@ -180,6 +240,9 @@ export class AutoclickerGame extends LitElement {
     ];
 
     this.planet = "";
+    this.factoryView = false;
+    this.rocketCreated = false;
+    this.rocketPrice = 5000;
   }
 
   firstUpdated() {
@@ -187,6 +250,8 @@ export class AutoclickerGame extends LitElement {
     this.counter = JSON.parse(localStorage.getItem("users")).find(
       (user) => user.name === this.user.name
     ).points;
+
+    this.rocketCreated = this.user.rockets.pro.owned;
 
     this.planet = this.planets[Math.floor(Math.random() * this.planets.length)];
     this.rippleBtn = this.shadowRoot.getElementById("ripple-btn");
@@ -209,8 +274,16 @@ export class AutoclickerGame extends LitElement {
         ></iron-icon>
       </header>
       <section>
-        <h2>Hi ${this.user.name}</h2>
-        <p>Planets discovered: ${this.counter}</p>
+        <div class="name">
+          <h2>Hi ${this.user.name}</h2>
+          <img src="https://cdn-icons-png.flaticon.com/512/2026/2026502.png" />
+        </div>
+        <p>
+          Planets discovered:
+          ${this.counter >= 1000
+            ? `${(this.counter / 1000).toFixed(1)}k`
+            : this.counter}
+        </p>
         <img src="${this.planet}" alt="planet icon" class="planet" />
         <div class="energy">
           <img
@@ -219,7 +292,6 @@ export class AutoclickerGame extends LitElement {
           />
           <p>Energy boosted: ${this.autoclickerBaseCost - 1}</p>
         </div>
-
         <button
           @click=${this.addClick}
           id="ripple-btn"
@@ -239,6 +311,33 @@ export class AutoclickerGame extends LitElement {
               Buy boost (${this.autoclikerCost})
             </button>`
           : ""}
+        <article class="factory">
+          <div class="factory__header">
+            <h3>Factory</h3>
+            <iron-icon
+              class="factory-icon"
+              icon="icons:change-history"
+              @click=${this.toggleFactoryView}
+            ></iron-icon>
+          </div>
+          ${this.factoryView
+            ? html`<button
+                @click=${this.createRocket}
+                ?disabled=${this.rocketCreated ||
+                this.counter <= this.rocketPrice
+                  ? true
+                  : false}
+                class=${this.rocketCreated || this.counter <= this.rocketPrice
+                  ? "rocket-btn disabled"
+                  : "rocket-btn rocket-active"}
+              >
+                <img src=${this.user.rockets.pro.img} alt="rocket image" />
+                ${!this.rocketCreated
+                  ? `Create new Rocket (${this.rocketPrice})`
+                  : "Rocket already created"}
+              </button>`
+            : ""}
+        </article>
       </section>
     `;
   }
@@ -278,7 +377,7 @@ export class AutoclickerGame extends LitElement {
       timeInterval
     );
 
-    this.interval.push(currentInterval);
+    this.interval[0] = currentInterval;
   }
 
   boostedEffect() {
@@ -294,14 +393,36 @@ export class AutoclickerGame extends LitElement {
     this.updateUser();
   }
 
-  updateUser() {
+  createRocket() {
+    this.counter -= this.rocketPrice;
+    this.rocketCreated = true;
+    this.addAutoclickerInterval(this.autoclickerBaseCost * 2);
+    this.updateUser("pro");
+  }
+
+  updateUser(rocket = "basic") {
     let allUsers = JSON.parse(localStorage.getItem("users"));
+
+    const userRockets =
+      rocket === "basic"
+        ? this.user.rockets
+        : {
+            basic: {
+              owned: false,
+              img: "https://cdn-icons-png.flaticon.com/512/316/316309.png",
+            },
+            pro: {
+              owned: true,
+              img: "https://cdn-icons-png.flaticon.com/512/181/181764.png",
+            },
+          };
 
     const userUpdated = {
       ...this.user,
       points: this.counter,
       baseCost: this.autoclickerBaseCost,
       clickerCost: this.autoclikerCost,
+      rockets: userRockets,
     };
 
     allUsers = allUsers.map((user) =>
@@ -314,6 +435,10 @@ export class AutoclickerGame extends LitElement {
     this.user = JSON.parse(localStorage.getItem("users")).find(
       (user) => user.name === this.user.name
     );
+  }
+
+  toggleFactoryView() {
+    this.factoryView = !this.factoryView;
   }
 
   rippleEffect(e) {
