@@ -52,72 +52,73 @@ export class AutoclickerHome extends LitElement {
       <header>
         <h1>PlanetClicker</h1>
       </header>
-      <main>
-        <h2>Create new player</h2>
-        <form @submit=${(e) => this.submitName(e)}>
-        <input
-          class="field"
-          placeholder="Name"
-          maxlength="7"
-          name='name'
-          @input=${(e) => this.changeInputValue(e)}
-        ></input>
-        ${
-          this.error !== ""
-            ? html`<div class="error">
-                <iron-icon class="error__icon" icon="icons:close"></iron-icon>
-                <p class="error__text">${this.error}</p>
-              </div>`
-            : ""
-        }
-        <button
-          type='submit'
-          class="button"
-          >Start</button
-        >
-        </form>
-      </main>
-      ${
-        this.allUsers
-          ? html`<section class="ranking">
-              <div class="rank__header">
-                <h3>Rank</h3>
-                <iron-icon
-                  class="rank"
-                  icon="icons:change-history"
-                  @click=${this.toggleRankView}
-                ></iron-icon>
-              </div>
-              ${this.rankView
-                ? html`<div class="ranking__users">
-                    ${this.allUsers
-                      .sort((a, b) => b.points - a.points)
-                      .map(
-                        (user, i) =>
-                          html`<div class="ranking__users--user">
-                            <div>
-                              <h4>${i + 1}</h4>
-                              <img
-                                src=${user.rockets.basic.owned
-                                  ? user.rockets.basic.img
-                                  : user.rockets.pro.img}
-                              />
-                            </div>
-                            <h4>${user.name}</h4>
-                            <h4>
-                              ${user.points >= 1000
-                                ? `${(user.points / 1000).toFixed(1)}k`
-                                : user.points}
-                            </h4>
-                          </div>`
-                      )}
-                  </div>`
-                : ""}
-            </section>`
-          : ""
-      }
-      
+      <main>${this.renderForm()}</main>
+      ${this.allUsers ? this.renderRank() : ""}
     `;
+  }
+
+  renderForm() {
+    return html`<h2>Create new player</h2>
+    <form @submit=${(e) => this.submitName(e)}>
+    <input
+      class="field"
+      placeholder="Name"
+      maxlength="7"
+      name='name'
+      @input=${(e) => this.changeInputValue(e)}
+    ></input>
+    ${
+      this.error !== ""
+        ? html`<div class="error">
+            <iron-icon class="error__icon" icon="icons:close"></iron-icon>
+            <p class="error__text">${this.error}</p>
+          </div>`
+        : ""
+    }
+    <button
+      type='submit'
+      class="button"
+      >Start</button
+    >
+    </form>`;
+  }
+
+  renderRank() {
+    return html`<section class="ranking">
+      <div class="rank__header">
+        <h3>Rank</h3>
+        <iron-icon
+          class="rank"
+          icon="icons:change-history"
+          @click=${this.toggleRankView}
+        ></iron-icon>
+      </div>
+      ${this.rankView
+        ? html`<div class="ranking__users">
+            ${this.allUsers
+              .sort((a, b) => b.points - a.points)
+              .map(
+                (user, i) =>
+                  html`<div class="ranking__users--user">
+                    <div>
+                      <h4>${i + 1}</h4>
+                      <img
+                        src=${user.rockets.basic.owned
+                          ? user.rockets.basic.img
+                          : user.rockets.pro.img}
+                      />
+                    </div>
+                    <h4>${user.name}</h4>
+                    <h4>
+                      ${user.points >= 1000
+                        ? `${(user.points / 1000).toFixed(1)}k`
+                        : user.points}
+                    </h4>
+                  </div>`
+              )}
+          </div>`
+        : ""}
+    </section>`;
   }
 
   changeInputValue(e) {

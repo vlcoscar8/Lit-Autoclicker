@@ -52,7 +52,6 @@ export class AutoclickerGame extends LitElement {
     ).points;
 
     this.rocketCreated = this.user.rockets.pro.owned;
-
     this.planet = this.planets[Math.floor(Math.random() * this.planets.length)];
     this.rippleBtn = this.shadowRoot.getElementById("ripple-btn");
 
@@ -77,73 +76,75 @@ export class AutoclickerGame extends LitElement {
           @click=${this.navigateToHome}
         ></iron-icon>
       </header>
-      <section>
-        <div class="name">
-          <h2>Hi ${this.user.name}</h2>
-          <img src="https://cdn-icons-png.flaticon.com/512/2026/2026502.png" />
-        </div>
-        <p>
-          Planets discovered:
-          ${this.counter >= 1000
-            ? `${(this.counter / 1000).toFixed(1)}k`
-            : this.counter}
-        </p>
-        <img src="${this.planet}" alt="planet icon" class="planet" />
-        <div class="energy">
-          <img
-            src="https://images.vexels.com/media/users/3/143495/isolated/preview/6b80b9965b1ec4d47c31d7eccf8ce4b0-icono-de-rayo-amarillo.png"
-            alt="energy icon"
-          />
-          <p>Energy boosted: ${this.autoclickerBaseCost - 1}</p>
-        </div>
-        <button
-          @click=${this.addClick}
-          id="ripple-btn"
-          anim="ripple"
-          class="ripple"
-        >
-          Discover planet
-        </button>
-        ${this.autoclickerBaseCost > 1 || this.counter >= 50
-          ? html`<button
-              @click=${(e) => this.buyAutoclicker(e)}
-              ?disabled=${this.counter < this.autoclikerCost ? true : false}
-              class=${this.counter < this.autoclikerCost
-                ? "disabled"
-                : "active"}
-            >
-              Buy boost (${this.autoclikerCost})
-            </button>`
-          : ""}
-        <article class="factory">
-          <div class="factory__header">
-            <h3>Factory</h3>
-            <iron-icon
-              class="factory-icon"
-              icon="icons:change-history"
-              @click=${this.toggleFactoryView}
-            ></iron-icon>
-          </div>
-          ${this.factoryView
-            ? html`<button
-                @click=${this.createRocket}
-                ?disabled=${this.rocketCreated ||
-                this.counter <= this.rocketPrice
-                  ? true
-                  : false}
-                class=${this.rocketCreated || this.counter <= this.rocketPrice
-                  ? "rocket-btn disabled"
-                  : "rocket-btn rocket-active"}
-              >
-                <img src=${this.user.rockets.pro.img} alt="rocket image" />
-                ${!this.rocketCreated
-                  ? `Create new Rocket (${this.rocketPrice})`
-                  : "Rocket already created"}
-              </button>`
-            : ""}
-        </article>
-      </section>
+      <section>${this.renderGame()}${this.renderFactory()}</section>
     `;
+  }
+
+  renderGame() {
+    return html` <div class="name">
+        <h2>Hi ${this.user.name}</h2>
+        <img src="https://cdn-icons-png.flaticon.com/512/2026/2026502.png" />
+      </div>
+      <p>
+        Planets discovered:
+        ${this.counter >= 1000
+          ? `${(this.counter / 1000).toFixed(1)}k`
+          : this.counter}
+      </p>
+      <img src="${this.planet}" alt="planet icon" class="planet" />
+      <div class="energy">
+        <img
+          src="https://images.vexels.com/media/users/3/143495/isolated/preview/6b80b9965b1ec4d47c31d7eccf8ce4b0-icono-de-rayo-amarillo.png"
+          alt="energy icon"
+        />
+        <p>Energy boosted: ${this.autoclickerBaseCost - 1}</p>
+      </div>
+      <button
+        @click=${this.addPlanetDiscovered}
+        id="ripple-btn"
+        anim="ripple"
+        class="ripple"
+      >
+        Discover planet
+      </button>
+      ${this.autoclickerBaseCost > 1 || this.counter >= 50
+        ? html`<button
+            @click=${(e) => this.buyAutoclicker(e)}
+            ?disabled=${this.counter < this.autoclikerCost ? true : false}
+            class=${this.counter < this.autoclikerCost ? "disabled" : "active"}
+          >
+            Buy boost (${this.autoclikerCost})
+          </button>`
+        : ""}`;
+  }
+
+  renderFactory() {
+    return html`<article class="factory">
+      <div class="factory__header">
+        <h3>Factory</h3>
+        <iron-icon
+          class="factory-icon"
+          icon="icons:change-history"
+          @click=${this.toggleFactoryView}
+        ></iron-icon>
+      </div>
+      ${this.factoryView
+        ? html`<button
+            @click=${this.createRocket}
+            ?disabled=${this.rocketCreated || this.counter <= this.rocketPrice
+              ? true
+              : false}
+            class=${this.rocketCreated || this.counter <= this.rocketPrice
+              ? "rocket-btn disabled"
+              : "rocket-btn rocket-active"}
+          >
+            <img src=${this.user.rockets.pro.img} alt="rocket image" />
+            ${!this.rocketCreated
+              ? `Create new Rocket (${this.rocketPrice})`
+              : "Rocket already created"}
+          </button>`
+        : ""}
+    </article>`;
   }
 
   navigateToHome() {
@@ -159,7 +160,7 @@ export class AutoclickerGame extends LitElement {
     );
   }
 
-  addClick(e) {
+  addPlanetDiscovered(e) {
     this.counter += 1;
     this.rippleEffect(e);
     this.updateUser();
