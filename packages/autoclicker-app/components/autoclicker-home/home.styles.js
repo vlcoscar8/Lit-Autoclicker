@@ -8,6 +8,7 @@ export const homeStyles = () => {
       align-items: center;
       justify-content: flex-start;
       height: 100%;
+      min-width: 50%;
       gap: 5rem;
     }
 
@@ -31,7 +32,6 @@ export const homeStyles = () => {
 
     main {
       width: 100%;
-      height: 35%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -99,9 +99,10 @@ export const homeStyles = () => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      color: white;
+      color: rgb(255, 255, 255);
       gap: 1rem;
       font-size: 1.7rem;
+      min-width: 32rem;
       max-height: 25rem;
     }
 
@@ -133,7 +134,7 @@ export const homeStyles = () => {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 70%;
+      width: 100%;
       box-sizing: border-box;
       padding: 0.5rem 2rem;
       gap: 2rem;
