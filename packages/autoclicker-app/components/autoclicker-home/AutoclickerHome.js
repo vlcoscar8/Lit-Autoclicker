@@ -127,7 +127,7 @@ export class AutoclickerHome extends LitElement {
 
   submitName(e) {
     e.preventDefault();
-    const validName = /^[A-Z][a-z]/;
+    const validName = /^[a-zA-Z]/;
 
     if (!validName.test(this.name)) {
       this.openErrorMessage();

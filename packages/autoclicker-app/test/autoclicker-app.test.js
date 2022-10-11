@@ -1,8 +1,8 @@
-import { html, LitElement } from "lit";
+import { html } from "lit";
 import { fixture, expect, elementUpdated } from "@open-wc/testing";
 
 import "../src/autoclicker-app.js";
-import "@bbva/autoclicker-home";
+import "../components/autoclicker-home/AutoclickerHome";
 
 describe("AutoclickerApp", () => {
   let app;
