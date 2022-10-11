@@ -56,13 +56,11 @@ export class AutoclickerGame extends LitElement {
     this.rippleBtn = this.shadowRoot.getElementById("ripple-btn");
 
     if (this.user.baseCost > 1) {
-      this.autoclickerBaseCost = this.user.baseCost;
+      this.autoclickerBaseCost = this.user.rockets.basic.owned
+        ? this.user.baseCost
+        : this.user.baseCost * 2;
       this.autoclikerCost = this.user.clickerCost;
-      this.addAutoclickerInterval(
-        this.user.rockets.basic.owned
-          ? this.autoclickerBaseCost
-          : this.autoclickerBaseCost * 2
-      );
+      this.addAutoclickerInterval(this.autoclickerBaseCost);
     }
   }
 
