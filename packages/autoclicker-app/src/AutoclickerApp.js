@@ -1,7 +1,7 @@
 import { LitElement, html, css } from "lit";
 
-import "@bbva/autoclicker-game";
-import "@bbva/autoclicker-home";
+import "../components/autoclicker-home/AutoclickerHome";
+import "../components/autoclicker-game/AutoclickerGame";
 
 import { installRouter } from "pwa-helpers/router.js";
 

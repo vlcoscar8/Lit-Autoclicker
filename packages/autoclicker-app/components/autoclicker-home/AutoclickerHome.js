@@ -194,3 +194,5 @@ export class AutoclickerHome extends LitElement {
     this.rankView = !this.rankView;
   }
 }
+
+window.customElements.define("autoclicker-home", AutoclickerHome);

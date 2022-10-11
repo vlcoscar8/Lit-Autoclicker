@@ -33,10 +33,10 @@ export class AutoclickerGame extends LitElement {
     this.interval = [];
     this.boosted = false;
     this.planets = [
-      "../../autoclicker-app/public/jupiter.png",
-      "../../autoclicker-app/public/mars.png",
-      "../../autoclicker-app/public/planet-earth.png",
-      "../../autoclicker-app/public/saturn.png",
+      "../../public/jupiter.png",
+      "../../public/mars.png",
+      "../../public/planet-earth.png",
+      "../../public/saturn.png",
     ];
 
     this.planet = "";
@@ -56,11 +56,9 @@ export class AutoclickerGame extends LitElement {
     this.rippleBtn = this.shadowRoot.getElementById("ripple-btn");
 
     if (this.user.baseCost > 1) {
-      this.autoclickerBaseCost = this.user.rockets.basic.owned
-        ? this.user.baseCost
-        : this.user.baseCost * 2;
+      this.autoclickerBaseCost = this.user.baseCost;
       this.autoclikerCost = this.user.clickerCost;
-      this.addAutoclickerInterval(this.autoclickerBaseCost);
+      this.addAutoclickerInterval();
     }
   }
 
@@ -168,12 +166,17 @@ export class AutoclickerGame extends LitElement {
     this.counter = this.counter - this.autoclikerCost;
     this.autoclickerBaseCost = this.user.baseCost + 1;
     this.autoclikerCost = this.autoclikerCost + 50 * this.autoclickerBaseCost;
-    this.addAutoclickerInterval(this.autoclickerBaseCost);
+
+    this.addAutoclickerInterval();
     this.boostedEffect();
   }
 
-  addAutoclickerInterval(basecost) {
-    const timeInterval = basecost > 2 ? 100 / basecost : 100;
+  addAutoclickerInterval() {
+    const multiplierValue = this.user.rockets.basic.owned
+      ? this.autoclickerBaseCost
+      : this.autoclickerBaseCost * 2;
+
+    const timeInterval = multiplierValue > 2 ? 100 / multiplierValue : 100;
 
     const currentInterval = setInterval(
       this.autoclickerEffect.bind(this),
@@ -255,3 +258,5 @@ export class AutoclickerGame extends LitElement {
     }; --y:${e.clientY - r.top};`;
   }
 }
+
+window.customElements.define("autoclicker-game", AutoclickerGame);

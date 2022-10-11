@@ -13,8 +13,7 @@
     "start": "web-dev-server --app-index index.html"
   },
   "dependencies": {
-    "@bbva/autoclicker-game": "*",
-    "@bbva/autoclicker-home": "*",
+    "@polymer/iron-icons": "^3.0.1",
     "lit": "^2.0.2",
     "pwa-helpers": "^0.9.1"
   },

@@ -102,7 +102,7 @@ export const homeStyles = () => {
       color: white;
       gap: 1rem;
       font-size: 1.7rem;
-      margin-top: -20rem;
+      margin-top: -15rem;
       max-height: 28rem;
     }
 

@@ -76,6 +76,7 @@ export const gameStyles = () => {
       color: var(--home-button-text-color, #000000);
       border: 1px solid var(--home-button-border-color, #000000);
       background-color: var(--home-button-background-color, #86edff);
+      touch-action: manipulation;
     }
 
     .disabled {
@@ -110,6 +111,7 @@ export const gameStyles = () => {
 
     .planet {
       width: 7rem;
+      background: transparent;
     }
 
     .factory {
