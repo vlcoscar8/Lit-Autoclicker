@@ -37,12 +37,7 @@ export class AutoclickerGame extends LitElement {
     this.autoclikerCost = 50;
     this.interval = [];
     this.boosted = false;
-    this.planets = [
-      planet1,
-      `./public/mars.png`,
-      `./public/planet-earth.png`,
-      `./public/saturn.png`,
-    ];
+    this.planets = [planet1, planet2, planet3, planet4];
 
     this.planet = "";
     this.factoryView = false;
