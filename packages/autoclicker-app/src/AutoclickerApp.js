@@ -79,7 +79,5 @@ export class AutoclickerApp extends LitElement {
     this.handleNavigation(window.location);
 
     this.user = e.detail.user;
-
-    localStorage.setItem("lastUser", JSON.stringify(this.user));
   }
 }

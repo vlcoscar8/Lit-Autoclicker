@@ -1,21 +1,54 @@
-import { html } from 'lit';
-import { fixture, expect } from '@open-wc/testing';
+import { html, LitElement } from "lit";
+import { fixture, expect, elementUpdated } from "@open-wc/testing";
 
-import '../src/autoclicker-app.js';
+import "../src/autoclicker-app.js";
+import "@bbva/autoclicker-home";
 
-describe('AutoclickerApp', () => {
-  let element;
+describe("AutoclickerApp", () => {
+  let app;
+
   beforeEach(async () => {
-    element = await fixture(html`<autoclicker-app></autoclicker-app>`);
+    const page = "home";
+    app = await fixture(
+      html`<autoclicker-app .page=${page}></autoclicker-app>`
+    );
   });
 
-  it('renders a h1', () => {
-    const h1 = element.shadowRoot.querySelector('h1');
-    expect(h1).to.exist;
-    expect(h1.textContent).to.equal('My app');
+  it("renders home component", async () => {
+    const home = app.shadowRoot.querySelector("autoclicker-home");
+    expect(home).to.exist;
   });
 
-  it('passes the a11y audit', async () => {
-    await expect(element).shadowDom.to.be.accessible();
+  it("renders game component when page is changed to 'game'", async () => {
+    app.page = "game";
+    await elementUpdated(app);
+    const game = app.shadowRoot.querySelector("autoclicker-game");
+    expect(game).to.exist;
+  });
+
+  it("renders home component when a default page path is setted", async () => {
+    app.page = "fakePath";
+    await elementUpdated(app);
+    const home = app.shadowRoot.querySelector("autoclicker-home");
+    expect(home).to.exist;
+  });
+
+  it("Not render home component when the page is setted as 'game'", async () => {
+    app.page = "game";
+    await elementUpdated(app);
+    const home = app.shadowRoot.querySelector("autoclicker-home");
+    expect(home).to.be.null;
+  });
+
+  it("Render game component when navigateToGame() is fired from home component", async () => {
+    const mockName = "MockName";
+    const home = await fixture(
+      html` <autoclicker-home .name=${mockName}></autoclicker-home> `
+    );
+    home.navigateToGame();
+
+    await elementUpdated(app);
+    const game = app.shadowRoot.querySelector("autoclicker-game");
+    expect(game).to.be.null;
   });
 });

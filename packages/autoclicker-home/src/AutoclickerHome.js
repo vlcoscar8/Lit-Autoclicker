@@ -168,6 +168,7 @@ export class AutoclickerHome extends LitElement {
       return this.addNewUser();
     }
 
+    localStorage.setItem("lastUser", JSON.stringify(currentUser));
     return currentUser;
   }
 
