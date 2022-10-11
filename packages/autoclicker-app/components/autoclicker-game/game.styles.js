@@ -3,7 +3,7 @@ import { css } from "lit";
 export const gameStyles = () => {
   return css`
     :host {
-      width: 100vw;
+      width: 100%;
       height: 100%;
 
       display: flex;
@@ -97,7 +97,7 @@ export const gameStyles = () => {
       justify-content: center;
       box-sizing: border-box;
       gap: 1rem;
-      width: 80vw;
+      width: 80%;
       height: 6rem;
     }
 
@@ -145,7 +145,7 @@ export const gameStyles = () => {
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      width: 90vw;
+      width: 90%;
       padding: 1rem 3rem;
     }
 

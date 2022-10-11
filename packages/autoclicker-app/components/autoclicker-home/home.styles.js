@@ -7,7 +7,8 @@ export const homeStyles = () => {
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
-      height: 100vh;
+      height: 100%;
+      gap: 5rem;
     }
 
     header {
@@ -29,12 +30,11 @@ export const homeStyles = () => {
     }
 
     main {
-      width: 100vw;
+      width: 100%;
       height: 35%;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 10rem;
     }
 
     h2 {
@@ -133,7 +133,7 @@ export const homeStyles = () => {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      width: 70vw;
+      width: 70%;
       box-sizing: border-box;
       padding: 0.5rem 2rem;
       gap: 2rem;
