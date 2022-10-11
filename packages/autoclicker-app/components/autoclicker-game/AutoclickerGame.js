@@ -3,6 +3,11 @@ import { gameStyles } from "./game.styles";
 
 import "@polymer/iron-icons";
 
+const planet1 = new URL("../../assets/jupiter.png", import.meta.url).href;
+const planet2 = new URL("../../assets/mars.png", import.meta.url).href;
+const planet3 = new URL("../../assets/planet-earth.png", import.meta.url).href;
+const planet4 = new URL("../../assets/saturn.png", import.meta.url).href;
+
 export class AutoclickerGame extends LitElement {
   static get styles() {
     return css`
@@ -33,7 +38,7 @@ export class AutoclickerGame extends LitElement {
     this.interval = [];
     this.boosted = false;
     this.planets = [
-      `./public/jupiter.png`,
+      planet1,
       `./public/mars.png`,
       `./public/planet-earth.png`,
       `./public/saturn.png`,
