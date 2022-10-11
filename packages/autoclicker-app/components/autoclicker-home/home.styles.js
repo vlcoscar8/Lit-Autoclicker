@@ -30,7 +30,7 @@ export const homeStyles = () => {
 
     main {
       width: 100vw;
-      height: 50%;
+      height: 35%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -49,7 +49,7 @@ export const homeStyles = () => {
       align-items: center;
       gap: 0.5rem;
       width: 100%;
-      height: 100%;
+      height: 50%;
     }
 
     .field {
@@ -102,8 +102,7 @@ export const homeStyles = () => {
       color: white;
       gap: 1rem;
       font-size: 1.7rem;
-      margin-top: -15rem;
-      max-height: 28rem;
+      max-height: 25rem;
     }
 
     .rank {
